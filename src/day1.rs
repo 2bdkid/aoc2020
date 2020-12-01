@@ -83,3 +83,31 @@ pub fn solve_part2_btreeset(input: &[u64]) -> Option<u64> {
         })
         .nth(0)
 }
+
+#[aoc(day1, part2, THREESUM)]
+pub fn solve_part2_3sum(input: &[u64]) -> Option<u64> {
+    let mut input = Vec::from_iter(input.iter());
+    input.sort();
+    let n = input.len();
+
+    for i in 0..n-2 {
+        let a = *input[i];
+        let mut start = i;
+        let mut end = n - 1;
+
+        while start <= end {
+            let b = *input[start];
+            let c = *input[end];
+            if a + b + c == 2020 {
+                return Some(a * b * c);
+            }
+            if a + b + c < 2020 {
+                start += 1;
+            } else {
+                end -= 1;
+            }
+        }
+    }
+
+    None
+}
