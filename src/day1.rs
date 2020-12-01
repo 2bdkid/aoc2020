@@ -1,8 +1,8 @@
 use aoc_runner_derive::aoc;
 use aoc_runner_derive::aoc_generator;
-use std::iter::FromIterator;
 use itertools::Itertools;
 use std::collections::{BTreeSet, HashSet};
+use std::iter::FromIterator;
 
 #[aoc_generator(day1)]
 pub fn input_generator(input: &str) -> Vec<u64> {
@@ -21,21 +21,25 @@ pub fn solve_part1(input: &[u64]) -> Option<u64> {
 #[aoc(day1, part1, HashSet)]
 pub fn solve_part1_hashset(input: &[u64]) -> Option<u64> {
     let input_set: HashSet<&u64> = HashSet::from_iter(input);
-    input.iter().filter_map(|&x| {
-        let y = 2020 - x;
-        input_set.get(&y).map(|&&y| x * y)
-    })
-    .nth(0)
+    input
+        .iter()
+        .filter_map(|&x| {
+            let y = 2020 - x;
+            input_set.get(&y).map(|&&y| x * y)
+        })
+        .nth(0)
 }
 
 #[aoc(day1, part1, BTreeSet)]
 pub fn solve_part1_btreeset(input: &[u64]) -> Option<u64> {
     let input_set: BTreeSet<&u64> = BTreeSet::from_iter(input);
-    input.iter().filter_map(|&x| {
-        let y = 2020 - x;
-        input_set.get(&y).map(|&&y| x * y)
-    })
-    .nth(0)
+    input
+        .iter()
+        .filter_map(|&x| {
+            let y = 2020 - x;
+            input_set.get(&y).map(|&&y| x * y)
+        })
+        .nth(0)
 }
 
 #[aoc(day1, part2, BruteForce)]
@@ -75,7 +79,7 @@ pub fn solve_part2_btreeset(input: &[u64]) -> Option<u64> {
         .cartesian_product(input)
         .filter_map(|(x, y)| {
             let z = 2020 - x - y;
-            input_set.get(&z).map(|z| *z * x * y)
+            input_set.get(&z).map(|&&z| z * x * y)
         })
         .nth(0)
 }
