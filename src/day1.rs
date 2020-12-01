@@ -9,13 +9,33 @@ pub fn input_generator(input: &str) -> Vec<u64> {
     input.lines().map(|s| s.parse().unwrap()).collect()
 }
 
-#[aoc(day1, part1)]
+#[aoc(day1, part1, BruteForce)]
 pub fn solve_part1(input: &[u64]) -> Option<u64> {
     input
         .iter()
         .cartesian_product(input)
         .filter_map(|(x, y)| if x + y == 2020 { Some(x * y) } else { None })
         .nth(0)
+}
+
+#[aoc(day1, part1, HashSet)]
+pub fn solve_part1_hashset(input: &[u64]) -> Option<u64> {
+    let input_set: HashSet<&u64> = HashSet::from_iter(input);
+    input.iter().filter_map(|&x| {
+        let y = 2020 - x;
+        input_set.get(&y).map(|&&y| x * y)
+    })
+    .nth(0)
+}
+
+#[aoc(day1, part1, BTreeSet)]
+pub fn solve_part1_btreeset(input: &[u64]) -> Option<u64> {
+    let input_set: BTreeSet<&u64> = BTreeSet::from_iter(input);
+    input.iter().filter_map(|&x| {
+        let y = 2020 - x;
+        input_set.get(&y).map(|&&y| x * y)
+    })
+    .nth(0)
 }
 
 #[aoc(day1, part2, BruteForce)]
