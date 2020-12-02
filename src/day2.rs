@@ -8,7 +8,7 @@ pub struct PasswordPolicy {
     c: char,
 }
 
-type Password = String;
+pub type Password = String;
 
 impl PasswordPolicy {
     pub fn new(a: usize, b: usize, c: char) -> PasswordPolicy {
