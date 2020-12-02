@@ -25,7 +25,7 @@ pub fn solve_part1_hashset(input: &[u64]) -> Option<u64> {
         .iter()
         .filter_map(|&x| {
             let y = 2020 - x;
-            input_set.get(&y).map(|&&y| x * y)
+            input_set.get(&y).map(|&y| x * y)
         })
         .nth(0)
 }
@@ -37,7 +37,7 @@ pub fn solve_part1_btreeset(input: &[u64]) -> Option<u64> {
         .iter()
         .filter_map(|&x| {
             let y = 2020 - x;
-            input_set.get(&y).map(|&&y| x * y)
+            input_set.get(&y).map(|&y| x * y)
         })
         .nth(0)
 }
@@ -66,7 +66,7 @@ pub fn solve_part2_hashset(input: &[u64]) -> Option<u64> {
         .cartesian_product(input)
         .filter_map(|(x, y)| {
             let z = 2020 - x - y;
-            input_set.get(&z).map(|z| *z * x * y)
+            input_set.get(&z).map(|&z| z * x * y)
         })
         .nth(0)
 }
