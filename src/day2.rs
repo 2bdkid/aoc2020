@@ -3,26 +3,26 @@ use aoc_runner_derive::aoc_generator;
 
 #[derive(Debug)]
 pub struct PasswordPolicy {
-    min: u32,
-    max: u32,
+    a: u32,
+    b: u32,
     c: char,
 }
 
 type Password = String;
 
 impl PasswordPolicy {
-    pub fn new(min: u32, max: u32, c: char) -> PasswordPolicy {
-        PasswordPolicy { min, max, c }
+    pub fn new(a: u32, b: u32, c: char) -> PasswordPolicy {
+        PasswordPolicy { a, b, c }
+    }
+
+    pub fn satisfied_by_old(&self, password: &Password) -> bool {
+        let count = password.chars().filter(|&c| c == self.c).count() as u32;
+        count >= self.a && count <= self.b
     }
 
     pub fn satisfied_by(&self, password: &Password) -> bool {
-        let count = password.chars().filter(|&c| c == self.c).count() as u32;
-        count >= self.min && count <= self.max
-    }
-
-    pub fn satisfied_by2(&self, password: &Password) -> bool {
-        let c1 = password.chars().nth(self.min as usize - 1).unwrap();
-        let c2 = password.chars().nth(self.max as usize - 1).unwrap();
+        let c1 = password.chars().nth(self.a as usize - 1).unwrap();
+        let c2 = password.chars().nth(self.b as usize - 1).unwrap();
         return (c1 == self.c) ^ (c2 == self.c);
     }
 }
@@ -33,12 +33,12 @@ fn input_generator(input: &str) -> Vec<(PasswordPolicy, Password)> {
         .lines()
         .map(|l| {
             let mut it = l.split(&['-', ' ', ':'][..]);
-            let min = it.next().unwrap().parse().unwrap();
-            let max = it.next().unwrap().parse().unwrap();
+            let a = it.next().unwrap().parse().unwrap();
+            let b = it.next().unwrap().parse().unwrap();
             let c = it.next().unwrap().chars().nth(0).unwrap();
             it.next().unwrap();
             let password = Password::from(it.next().unwrap());
-            (PasswordPolicy::new(min, max, c), password)
+            (PasswordPolicy::new(a, b, c), password)
         })
         .collect()
 }
@@ -47,7 +47,7 @@ fn input_generator(input: &str) -> Vec<(PasswordPolicy, Password)> {
 fn solve_part1(input: &[(PasswordPolicy, Password)]) -> u32 {
     input
         .iter()
-        .filter(|(policy, password)| policy.satisfied_by(password))
+        .filter(|(policy, password)| policy.satisfied_by_old(password))
         .count() as u32
 }
 
@@ -55,7 +55,7 @@ fn solve_part1(input: &[(PasswordPolicy, Password)]) -> u32 {
 fn solve_part2(input: &[(PasswordPolicy, Password)]) -> u32 {
     input
         .iter()
-        .filter(|(policy, password)| policy.satisfied_by2(password))
+        .filter(|(policy, password)| policy.satisfied_by(password))
         .count() as u32
 }
 
