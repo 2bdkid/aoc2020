@@ -23,7 +23,7 @@ impl PasswordPolicy {
     pub fn satisfied_by(&self, password: &Password) -> bool {
         let c1 = password.chars().nth(self.a - 1).unwrap();
         let c2 = password.chars().nth(self.b - 1).unwrap();
-        return (c1 == self.c) ^ (c2 == self.c);
+        (c1 == self.c) ^ (c2 == self.c)
     }
 }
 
