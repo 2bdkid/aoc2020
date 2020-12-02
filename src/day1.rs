@@ -90,7 +90,7 @@ pub fn solve_part2_3sum(input: &[u64]) -> Option<u64> {
     input.sort();
     let n = input.len();
 
-    for i in 0..n-2 {
+    for i in 0..n - 2 {
         let a = input[i];
         let mut start = i;
         let mut end = n - 1;
