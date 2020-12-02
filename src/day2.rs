@@ -19,6 +19,12 @@ impl PasswordPolicy {
         let count = password.chars().filter(|&c| c == self.c).count() as u32;
         count >= self.min && count <= self.max
     }
+
+    pub fn satisfied_by2(&self, password: &Password) -> bool {
+        let c1 = password.chars().nth(self.min as usize - 1).unwrap();
+        let c2 = password.chars().nth(self.max as usize - 1).unwrap();
+        return (c1 == self.c) ^ (c2 == self.c);
+    }
 }
 
 #[aoc_generator(day2)]
@@ -42,6 +48,14 @@ fn solve_part1(input: &[(PasswordPolicy, Password)]) -> u32 {
     input
         .iter()
         .filter(|(policy, password)| policy.satisfied_by(password))
+        .count() as u32
+}
+
+#[aoc(day2, part2)]
+fn solve_part2(input: &[(PasswordPolicy, Password)]) -> u32 {
+    input
+        .iter()
+        .filter(|(policy, password)| policy.satisfied_by2(password))
         .count() as u32
 }
 
