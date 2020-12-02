@@ -44,19 +44,19 @@ fn input_generator(input: &str) -> Vec<(PasswordPolicy, Password)> {
 }
 
 #[aoc(day2, part1)]
-fn solve_part1(input: &[(PasswordPolicy, Password)]) -> u32 {
+fn solve_part1(input: &[(PasswordPolicy, Password)]) -> usize {
     input
         .iter()
         .filter(|(policy, password)| policy.satisfied_by_old(password))
-        .count() as u32
+        .count()
 }
 
 #[aoc(day2, part2)]
-fn solve_part2(input: &[(PasswordPolicy, Password)]) -> u32 {
+fn solve_part2(input: &[(PasswordPolicy, Password)]) -> usize {
     input
         .iter()
         .filter(|(policy, password)| policy.satisfied_by(password))
-        .count() as u32
+        .count()
 }
 
 #[cfg(test)]
