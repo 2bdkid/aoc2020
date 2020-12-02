@@ -3,26 +3,26 @@ use aoc_runner_derive::aoc_generator;
 
 #[derive(Debug)]
 pub struct PasswordPolicy {
-    a: u32,
-    b: u32,
+    a: usize,
+    b: usize,
     c: char,
 }
 
 type Password = String;
 
 impl PasswordPolicy {
-    pub fn new(a: u32, b: u32, c: char) -> PasswordPolicy {
+    pub fn new(a: usize, b: usize, c: char) -> PasswordPolicy {
         PasswordPolicy { a, b, c }
     }
 
     pub fn satisfied_by_old(&self, password: &Password) -> bool {
-        let count = password.chars().filter(|&c| c == self.c).count() as u32;
+        let count = password.chars().filter(|&c| c == self.c).count();
         count >= self.a && count <= self.b
     }
 
     pub fn satisfied_by(&self, password: &Password) -> bool {
-        let c1 = password.chars().nth(self.a as usize - 1).unwrap();
-        let c2 = password.chars().nth(self.b as usize - 1).unwrap();
+        let c1 = password.chars().nth(self.a - 1).unwrap();
+        let c2 = password.chars().nth(self.b - 1).unwrap();
         return (c1 == self.c) ^ (c2 == self.c);
     }
 }
