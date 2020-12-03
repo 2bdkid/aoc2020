@@ -6,19 +6,19 @@ pub fn input_generator(input: &str) -> Vec<String> {
     input.lines().map(|l| String::from(l)).collect()
 }
 
-pub fn count_specific_slope(input: &[String], dx: i32, dy: i32) -> usize {
+pub fn count_specific_slope(input: &[String], dx: usize, dy: usize) -> usize {
     input
         .iter()
         .enumerate()
         .filter_map(|(i, line)| {
-            if i % dy as usize == 0 {
+            if i % dy == 0 {
                 Some(line)
             } else {
                 None
             }
         })
         .enumerate()
-        .filter(|(y, line)| line.chars().nth((y * dx as usize) % line.len()).unwrap() == '#')
+        .filter(|(y, line)| line.chars().nth((y * dx) % line.len()).unwrap() == '#')
         .count()
 }
 
