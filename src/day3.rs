@@ -24,13 +24,13 @@ pub fn count_specific_slope(input: &[String], dx: usize, dy: usize) -> usize {
 
 #[aoc(day3, part1)]
 pub fn solve_part1(input: &[String]) -> usize {
-    count_specific_slope(&input, 3, 1)
+    count_specific_slope(input, 3, 1)
 }
 
 #[aoc(day3, part2)]
 pub fn solve_part2(input: &[String]) -> usize {
     [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
         .iter()
-        .map(|(dx, dy)| count_specific_slope(&input, *dx, *dy))
+        .map(|(dx, dy)| count_specific_slope(input, *dx, *dy))
         .product()
 }
