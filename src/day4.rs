@@ -75,7 +75,7 @@ impl Passport {
                 .map(|hcl| {
                     hcl.chars().nth(0).map(|c| c == '#').unwrap_or(false)
                         && hcl.chars().count() == 7
-                        && u32::from_str_radix(hcl.trim_start_matches("#"), 16).is_ok()
+                        && u32::from_str_radix(&hcl[1..], 16).is_ok()
                 })
                 .unwrap_or(false)
             && self
