@@ -27,34 +27,34 @@ impl Passport {
     fn is_valid(&self) -> bool {
         self.byr
             .as_ref()
-            .map(|byr| {
+            .filter(|byr| {
                 byr.parse::<u32>()
                     .map(|byr| byr >= 1920 && byr <= 2002)
                     .unwrap_or(false)
             })
-            .unwrap_or(false)
+            .is_some()
             && self
                 .iyr
                 .as_ref()
-                .map(|iyr| {
+                .filter(|iyr| {
                     iyr.parse::<u32>()
                         .map(|iyr| iyr >= 2010 && iyr <= 2020)
                         .unwrap_or(false)
                 })
-                .unwrap_or(false)
+                .is_some()
             && self
                 .eyr
                 .as_ref()
-                .map(|eyr| {
+                .filter(|eyr| {
                     eyr.parse::<u32>()
                         .map(|eyr| eyr >= 2020 && eyr <= 2030)
                         .unwrap_or(false)
                 })
-                .unwrap_or(false)
+                .is_some()
             && self
                 .hgt
                 .as_ref()
-                .map(|hgt| {
+                .filter(|hgt| {
                     hgt.ends_with("cm")
                         && hgt
                             .trim_end_matches("cm")
@@ -68,20 +68,20 @@ impl Passport {
                                 .map(|n| n >= 59 && n <= 76)
                                 .unwrap_or(false)
                 })
-                .unwrap_or(false)
+                .is_some()
             && self
                 .hcl
                 .as_ref()
-                .map(|hcl| {
+                .filter(|hcl| {
                     hcl.chars().nth(0).map(|c| c == '#').unwrap_or(false)
                         && hcl.chars().count() == 7
                         && u32::from_str_radix(&hcl[1..], 16).is_ok()
                 })
-                .unwrap_or(false)
+                .is_some()
             && self
                 .ecl
                 .as_ref()
-                .map(|ecl| {
+                .filter(|&ecl| {
                     ecl == "amb"
                         || ecl == "blu"
                         || ecl == "brn"
@@ -90,15 +90,15 @@ impl Passport {
                         || ecl == "hzl"
                         || ecl == "oth"
                 })
-                .unwrap_or(false)
+                .is_some()
             && self
                 .pid
                 .as_ref()
-                .map(|pid| {
+                .filter(|pid| {
                     pid.chars().count() == 9
                         && pid.chars().filter(|c| char::is_digit(*c, 10)).count() == 9
                 })
-                .unwrap_or(false)
+                .is_some()
     }
 }
 
