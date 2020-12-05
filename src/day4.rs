@@ -24,7 +24,7 @@ impl Passport {
             && self.pid.is_some()
     }
 
-    fn is_valid(&self) -> bool {
+    fn is_birthyear_valid(&self) -> bool {
         self.byr
             .as_ref()
             .filter(|byr| {
@@ -32,68 +32,90 @@ impl Passport {
                     .map_or(false, |byr| byr >= 1920 && byr <= 2002)
             })
             .is_some()
-            && self
-                .iyr
-                .as_ref()
-                .filter(|iyr| {
-                    iyr.parse::<u32>()
-                        .map_or(false, |iyr| iyr >= 2010 && iyr <= 2020)
-                })
-                .is_some()
-            && self
-                .eyr
-                .as_ref()
-                .filter(|eyr| {
-                    eyr.parse::<u32>()
-                        .map_or(false, |eyr| eyr >= 2020 && eyr <= 2030)
-                })
-                .is_some()
-            && self
-                .hgt
-                .as_ref()
-                .filter(|hgt| {
-                    hgt.ends_with("cm")
+    }
+
+    fn is_issue_year_valid(&self) -> bool {
+        self.iyr
+            .as_ref()
+            .filter(|iyr| {
+                iyr.parse::<u32>()
+                    .map_or(false, |iyr| iyr >= 2010 && iyr <= 2020)
+            })
+            .is_some()
+    }
+
+    fn is_expiration_year_valid(&self) -> bool {
+        self.eyr
+            .as_ref()
+            .filter(|eyr| {
+                eyr.parse::<u32>()
+                    .map_or(false, |eyr| eyr >= 2020 && eyr <= 2030)
+            })
+            .is_some()
+    }
+
+    fn is_height_valid(&self) -> bool {
+        self.hgt
+            .as_ref()
+            .filter(|hgt| {
+                hgt.ends_with("cm")
+                    && hgt
+                        .trim_end_matches("cm")
+                        .parse::<u32>()
+                        .map_or(false, |n| n >= 150 && n <= 193)
+                    || hgt.ends_with("in")
                         && hgt
-                            .trim_end_matches("cm")
+                            .trim_end_matches("in")
                             .parse::<u32>()
-                            .map_or(false, |n| n >= 150 && n <= 193)
-                        || hgt.ends_with("in")
-                            && hgt
-                                .trim_end_matches("in")
-                                .parse::<u32>()
-                                .map_or(false, |n| n >= 59 && n <= 76)
-                })
-                .is_some()
-            && self
-                .hcl
-                .as_ref()
-                .filter(|hcl| {
-                    hcl.chars().nth(0).map_or(false, |c| c == '#')
-                        && hcl.chars().count() == 7
-                        && u32::from_str_radix(&hcl[1..], 16).is_ok()
-                })
-                .is_some()
-            && self
-                .ecl
-                .as_ref()
-                .filter(|&ecl| {
-                    ecl == "amb"
-                        || ecl == "blu"
-                        || ecl == "brn"
-                        || ecl == "gry"
-                        || ecl == "grn"
-                        || ecl == "hzl"
-                        || ecl == "oth"
-                })
-                .is_some()
-            && self
-                .pid
-                .as_ref()
-                .filter(|pid| {
-                    pid.chars().count() == 9
-                        && pid.chars().filter(|c| char::is_digit(*c, 10)).count() == 9
-                })
-                .is_some()
+                            .map_or(false, |n| n >= 59 && n <= 76)
+            })
+            .is_some()
+    }
+
+    fn is_hair_color_valid(&self) -> bool {
+        self.hcl
+            .as_ref()
+            .filter(|hcl| {
+                hcl.chars().nth(0).map_or(false, |c| c == '#')
+                    && hcl.chars().count() == 7
+                    && u32::from_str_radix(&hcl[1..], 16).is_ok()
+            })
+            .is_some()
+    }
+
+    fn is_eye_color_valid(&self) -> bool {
+        self.ecl
+            .as_ref()
+            .filter(|&ecl| {
+                ecl == "amb"
+                    || ecl == "blu"
+                    || ecl == "brn"
+                    || ecl == "gry"
+                    || ecl == "grn"
+                    || ecl == "hzl"
+                    || ecl == "oth"
+            })
+            .is_some()
+    }
+
+    fn is_passport_id_valid(&self) -> bool {
+        self.pid
+            .as_ref()
+            .filter(|pid| {
+                pid.chars().count() == 9
+                    && pid.chars().filter(|c| char::is_digit(*c, 10)).count() == 9
+            })
+            .is_some()
+    }
+
+    fn is_valid(&self) -> bool {
+        self.is_birthyear_valid()
+            && self.is_issue_year_valid()
+            && self.is_expiration_year_valid()
+            && self.is_height_valid()
+            && self.is_hair_color_valid()
+            && self.is_eye_color_valid()
+            && self.is_passport_id_valid()
     }
 }
 
