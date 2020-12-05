@@ -29,8 +29,7 @@ impl Passport {
             .as_ref()
             .filter(|byr| {
                 byr.parse::<u32>()
-                    .map(|byr| byr >= 1920 && byr <= 2002)
-                    .unwrap_or(false)
+                    .map_or(false, |byr| byr >= 1920 && byr <= 2002)
             })
             .is_some()
             && self
@@ -38,8 +37,7 @@ impl Passport {
                 .as_ref()
                 .filter(|iyr| {
                     iyr.parse::<u32>()
-                        .map(|iyr| iyr >= 2010 && iyr <= 2020)
-                        .unwrap_or(false)
+                        .map_or(false, |iyr| iyr >= 2010 && iyr <= 2020)
                 })
                 .is_some()
             && self
@@ -47,8 +45,7 @@ impl Passport {
                 .as_ref()
                 .filter(|eyr| {
                     eyr.parse::<u32>()
-                        .map(|eyr| eyr >= 2020 && eyr <= 2030)
-                        .unwrap_or(false)
+                        .map_or(false, |eyr| eyr >= 2020 && eyr <= 2030)
                 })
                 .is_some()
             && self
@@ -59,21 +56,19 @@ impl Passport {
                         && hgt
                             .trim_end_matches("cm")
                             .parse::<u32>()
-                            .map(|n| n >= 150 && n <= 193)
-                            .unwrap_or(false)
+                            .map_or(false, |n| n >= 150 && n <= 193)
                         || hgt.ends_with("in")
                             && hgt
                                 .trim_end_matches("in")
                                 .parse::<u32>()
-                                .map(|n| n >= 59 && n <= 76)
-                                .unwrap_or(false)
+                                .map_or(false, |n| n >= 59 && n <= 76)
                 })
                 .is_some()
             && self
                 .hcl
                 .as_ref()
                 .filter(|hcl| {
-                    hcl.chars().nth(0).map(|c| c == '#').unwrap_or(false)
+                    hcl.chars().nth(0).map_or(false, |c| c == '#')
                         && hcl.chars().count() == 7
                         && u32::from_str_radix(&hcl[1..], 16).is_ok()
                 })
