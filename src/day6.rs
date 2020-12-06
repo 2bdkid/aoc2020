@@ -36,8 +36,8 @@ pub fn solve_part2(input: &[GroupAnswers]) -> usize {
         .map(|group| {
             group
                 .iter()
-                .map(|person| person.chars().collect::<HashSet<char>>())
-                .fold1(|acc, g| g.intersection(&acc).copied().collect())
+                .map(|person| person.chars().collect())
+                .fold1(|acc, g: HashSet<char>| g.intersection(&acc).copied().collect())
                 .unwrap()
                 .len()
         })
