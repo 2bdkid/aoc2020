@@ -30,5 +30,5 @@ pub fn solve_part1(input: &[u16]) -> Option<u16> {
 #[aoc(day5, part2)]
 pub fn solve_part2(input: &[u16]) -> Option<u16> {
     let ids: HashSet<u16> = HashSet::from_iter(input.iter().cloned());
-    (0..1024).find(|id| !ids.contains(id) && ids.contains(&(id - 1)) && ids.contains(&(id + 1)))
+    (1..1023).find(|id| !ids.contains(id) && ids.contains(&(id - 1)) && ids.contains(&(id + 1)))
 }
