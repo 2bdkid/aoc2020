@@ -67,7 +67,7 @@ mod tests {
     fn password_policy_satisfied_by_true() {
         let policy = PasswordPolicy::new(1, 3, 'c');
         let password = Password::from("abecdec");
-        assert!(policy.satisfied_by(&password))
+        assert!(policy.satisfied_by_old(&password))
     }
 
     #[test]
