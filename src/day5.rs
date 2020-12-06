@@ -5,30 +5,23 @@ use std::collections::HashSet;
 use std::iter::FromIterator;
 
 #[aoc_generator(day5)]
-pub fn input_generator(input: &str) -> Vec<u16> {
+pub fn input_generator(input: &str) -> Vec<u32> {
     input
+        .chars()
+        .map(|c| if c == 'F' || c == 'L' { '0' } else if c == 'B' || c == 'R' { '1' } else { c })
+        .collect::<String>()
         .lines()
-        .map(|boarding_pass| {
-            u16::from_str_radix(
-                &boarding_pass
-                    .replace("F", "0")
-                    .replace("B", "1")
-                    .replace("L", "0")
-                    .replace("R", "1"),
-                2,
-            )
-            .unwrap()
-        })
+        .map(|n| u32::from_str_radix(n, 2).unwrap())
         .collect()
 }
 
 #[aoc(day5, part1)]
-pub fn solve_part1(input: &[u16]) -> Option<u16> {
+pub fn solve_part1(input: &[u32]) -> Option<u32> {
     input.iter().max().cloned()
 }
 
 #[aoc(day5, part2)]
-pub fn solve_part2(input: &[u16]) -> Option<u16> {
-    let ids: HashSet<u16> = HashSet::from_iter(input.iter().cloned());
+pub fn solve_part2(input: &[u32]) -> Option<u32> {
+    let ids: HashSet<u32> = HashSet::from_iter(input.iter().cloned());
     (1..1023).find(|id| !ids.contains(id) && ids.contains(&(id - 1)) && ids.contains(&(id + 1)))
 }
