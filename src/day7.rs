@@ -4,12 +4,6 @@ use aoc_runner_derive::aoc_generator;
 use itertools::Itertools;
 use std::collections::{HashMap, HashSet};
 
-#[derive(Debug)]
-pub struct Rule {
-    color: String,
-    quantities: Vec<(u32, String)>,
-}
-
 #[aoc_generator(day7)]
 pub fn input_generator(input: &str) -> Vec<(String, Vec<(u32, String)>)> {
     input
