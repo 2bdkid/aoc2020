@@ -65,7 +65,11 @@ pub fn solve_part2_caterpillar(input: &[u64]) -> Option<u64> {
             sum += input[b];
         } else {
             sum -= input[a];
-            a += 1
+            a += 1;
+            if a == b {
+                b += 1;
+                sum += &input[b];
+            }
         }
     }
 
