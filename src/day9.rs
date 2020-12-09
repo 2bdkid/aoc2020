@@ -5,10 +5,7 @@ use std::collections::HashSet;
 
 #[aoc_generator(day9)]
 pub fn input_generator(input: &str) -> Vec<u64> {
-    input
-        .lines()
-        .map(|x| x.parse::<u64>().unwrap())
-        .collect()
+    input.lines().map(|x| x.parse::<u64>().unwrap()).collect()
 }
 
 #[aoc(day9, part1)]
@@ -44,10 +41,10 @@ pub fn solve_part2(input: &[u64]) -> Option<u64> {
         for j in i + 1..input.len() {
             let region = &input[i..j];
             if region.iter().sum::<u64>() == invalid_number {
-                return Some(region.iter().min().unwrap() + region.iter().max().unwrap())
+                return Some(region.iter().min().unwrap() + region.iter().max().unwrap());
             }
         }
-    }    
+    }
 
     None
 }
