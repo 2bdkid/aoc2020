@@ -2,6 +2,7 @@ use aoc_runner_derive::aoc;
 use aoc_runner_derive::aoc_generator;
 
 use std::collections::HashSet;
+use itertools::Itertools;
 
 #[aoc_generator(day9)]
 pub fn input_generator(input: &str) -> Vec<u64> {
@@ -41,7 +42,8 @@ pub fn solve_part2(input: &[u64]) -> Option<u64> {
         for j in i + 1..input.len() {
             let region = &input[i..j];
             if region.iter().sum::<u64>() == invalid_number {
-                return Some(region.iter().min().unwrap() + region.iter().max().unwrap());
+                let (min, max)= region.iter().minmax().into_option().unwrap();
+                return Some(min + max);
             }
         }
     }
@@ -50,7 +52,7 @@ pub fn solve_part2(input: &[u64]) -> Option<u64> {
 }
 
 #[aoc(day9, part2, CATERPILLAR)]
-pub fn solve_part2_caterpillar(input: &[u64]) -> u64 {
+pub fn solve_part2_caterpillar(input: &[u64]) -> Option<u64> {
     let invalid_number = solve_part1(input).unwrap();
 
     let mut a = 0;
@@ -67,5 +69,5 @@ pub fn solve_part2_caterpillar(input: &[u64]) -> u64 {
         }
     }
 
-    input[a..b].iter().min().unwrap() + input[a..b].iter().max().unwrap()
+    input[a..b].iter().minmax().into_option().map(|(min, max)| min + max)
 }
