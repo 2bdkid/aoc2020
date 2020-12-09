@@ -69,5 +69,5 @@ pub fn solve_part2_caterpillar(input: &[u64]) -> Option<u64> {
         }
     }
 
-    input[a..b].iter().minmax().into_option().map(|(min, max)| min + max)
+    input[a..b + 1].iter().minmax().into_option().map(|(min, max)| min + max)
 }
