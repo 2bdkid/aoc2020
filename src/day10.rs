@@ -67,7 +67,7 @@ fn count_paths(path: &[i64]) -> Option<i64> {
     let mut dp: HashMap<i64, i64> = HashMap::new();
     dp.insert(0, 1);
 
-    for n in &path[1..] {
+    for n in path.iter().rev() {
         dp.insert(
             *n,
             dp.get(&(n - 1)).unwrap_or(&0)
@@ -84,12 +84,10 @@ pub fn solve_part2(input: &[i64]) -> Option<i64> {
     let target_joltage: i64 = input.iter().max().unwrap() + 3;
     let mut remaining: HashSet<i64> = input.iter().copied().collect();
     remaining.insert(target_joltage);
-    let mut path: Vec<i64> =
+    let path: Vec<i64> =
         search_adapter(0, target_joltage, remaining.clone(), Vec::new(), (0, 0))
             .map(|(path, _)| path)
             .unwrap();
-    path.push(0);
-    path.reverse();
     count_paths(&path)
 }
 
