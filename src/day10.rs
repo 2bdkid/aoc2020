@@ -55,12 +55,13 @@ fn search_adapter(
 }
 
 #[aoc(day10, part1)]
-pub fn solve_part1(input: &[i64]) -> Option<i64> {
+pub fn solve_part1(input: &[i64]) -> i64 {
     let target_joltage: i64 = input.iter().max().unwrap() + 3;
     let mut remaining: HashSet<i64> = input.iter().copied().collect();
     remaining.insert(target_joltage);
-    search_adapter(0, target_joltage, remaining.clone(), Vec::new(), (0, 0))
-        .map(|(_, (ones, threes))| ones * threes)
+    let (_, (ones, threes)) =
+        search_adapter(0, target_joltage, remaining.clone(), Vec::new(), (0, 0)).unwrap();
+    ones * threes
 }
 
 fn count_paths(path: &[i64]) -> Option<i64> {
@@ -84,10 +85,8 @@ pub fn solve_part2(input: &[i64]) -> Option<i64> {
     let target_joltage: i64 = input.iter().max().unwrap() + 3;
     let mut remaining: HashSet<i64> = input.iter().copied().collect();
     remaining.insert(target_joltage);
-    let path: Vec<i64> =
-        search_adapter(0, target_joltage, remaining.clone(), Vec::new(), (0, 0))
-            .map(|(path, _)| path)
-            .unwrap();
+    let (path, _) =
+        search_adapter(0, target_joltage, remaining.clone(), Vec::new(), (0, 0)).unwrap();
     count_paths(&path)
 }
 
