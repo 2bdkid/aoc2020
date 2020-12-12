@@ -215,7 +215,7 @@ pub fn solve_part2(input: &HashMap<(i32, i32), Position>) -> usize {
     let mut positions = input.clone();
 
     loop {
-        let adj: HashMap<(i32, i32), u32> = positions
+        let adj: Vec<((i32, i32), u32)> = positions
             .iter()
             .filter_map(|(pt, p)| {
                 if *p != Position::Floor {
