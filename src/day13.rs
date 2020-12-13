@@ -2,21 +2,21 @@ use aoc_runner_derive::aoc;
 use aoc_runner_derive::aoc_generator;
 
 #[aoc_generator(day13)]
-pub fn input_generator(input: &str) -> (u128, Vec<(u128, Option<u128>)>) {
-    let estimate: u128 = input.lines().nth(0).unwrap().parse().unwrap();
+pub fn input_generator(input: &str) -> (u64, Vec<(u64, Option<u64>)>) {
+    let estimate: u64 = input.lines().nth(0).unwrap().parse().unwrap();
     let ids = input
         .lines()
         .nth(1)
         .unwrap()
         .split(',')
         .enumerate()
-        .map(|(u, id)| (u as u128, id.parse().ok()))
+        .map(|(u, id)| (u as u64, id.parse().ok()))
         .collect();
     (estimate, ids)
 }
 
 #[aoc(day13, part1)]
-pub fn solve_part1((estimate, ids): &(u128, Vec<(u128, Option<u128>)>)) -> Option<u128> {
+pub fn solve_part1((estimate, ids): &(u64, Vec<(u64, Option<u64>)>)) -> Option<u64> {
     ids.iter()
         .filter_map(|(_, period)| {
             period.map(|period| (period, (period - estimate % period) % period))
@@ -26,7 +26,7 @@ pub fn solve_part1((estimate, ids): &(u128, Vec<(u128, Option<u128>)>)) -> Optio
 }
 
 #[aoc(day13, part2)]
-pub fn solve_part2((_, ids): &(u128, Vec<(u128, Option<u128>)>)) -> u128 {
+pub fn solve_part2((_, ids): &(u64, Vec<(u64, Option<u64>)>)) -> u64 {
     let mut t = 0;
     let mut mul = 1;
 
