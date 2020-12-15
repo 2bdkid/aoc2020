@@ -88,14 +88,14 @@ impl TryFrom<&str> for Instr {
                 .split_ascii_whitespace()
                 .nth(0)
                 .unwrap()
-                .parse()
-                .unwrap();
+                .parse::<usize>()
+                .map_err(|e| e.to_string())?;
             let value: u64 = trimmed
                 .split_ascii_whitespace()
                 .nth(1)
                 .unwrap()
-                .parse()
-                .unwrap();
+                .parse::<u64>()
+                .map_err(|e| e.to_string())?;
             Ok(Instr::Mem(addr, value))
         }
     }
