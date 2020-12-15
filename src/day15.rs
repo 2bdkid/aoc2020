@@ -15,29 +15,30 @@ pub fn input_generator(input: &str) -> Vec<u32> {
 
 fn nth_number_spoken(input: &[u32], n: u32) -> u32 {
     let mut turn = input.len() as u32 + 1;
-    let mut first: HashMap<u32, u32> = input
+    let mut prev: HashMap<u32, (u32, Option<u32>)> = input
         .iter()
         .copied()
         .enumerate()
-        .map(|(i, x)| (x, i as u32 + 1))
+        .map(|(i, x)| (x, (i as u32 + 1, None)))
         .collect();
-    let mut second: HashMap<u32, u32> = HashMap::new();
     let mut prev_spoken = *input.last().unwrap();
 
     while turn <= n {
-        if first.contains_key(&prev_spoken) && !second.contains_key(&prev_spoken) {
-            if let Some(t) = first.get(&0) {
-                second.insert(0, *t);
+        if let Some((t, Some(s))) = prev.get(&prev_spoken) {
+            let next_spoken = t - s;
+            if let Some((t, _)) = prev.get(&next_spoken).copied() {
+                prev.insert(next_spoken, (turn, Some(t)));
+            } else {
+                prev.insert(next_spoken, (turn, None));
             }
-            first.insert(0, turn);
-            prev_spoken = 0;
-        } else {
-            let next_spoken = *first.get(&prev_spoken).unwrap() - *second.get(&prev_spoken).unwrap();
-            if let Some(t) = first.get(&next_spoken) {
-                second.insert(next_spoken, *t);
-            }
-            first.insert(next_spoken, turn);
             prev_spoken = next_spoken;
+        } else {
+            if let Some((t, _)) = prev.get(&0).copied() {
+                prev.insert(0, (turn, Some(t)));
+            } else {
+                prev.insert(0, (turn, None));
+            }
+            prev_spoken = 0;
         }
         turn += 1;
     }
