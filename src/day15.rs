@@ -32,13 +32,12 @@ fn nth_number_spoken(input: &[u32], n: u32) -> u32 {
             first.insert(0, turn);
             prev_spoken = 0;
         } else {
-            let t1 = *first.get(&prev_spoken).unwrap();
-            let t2 = *second.get(&prev_spoken).unwrap();
-            prev_spoken = t1 - t2;
-            if let Some(t) = first.get(&prev_spoken) {
-                second.insert(prev_spoken, *t);
+            let next_spoken = *first.get(&prev_spoken).unwrap() - *second.get(&prev_spoken).unwrap();
+            if let Some(t) = first.get(&next_spoken) {
+                second.insert(next_spoken, *t);
             }
-            first.insert(prev_spoken, turn);
+            first.insert(next_spoken, turn);
+            prev_spoken = next_spoken;
         }
         turn += 1;
     }
