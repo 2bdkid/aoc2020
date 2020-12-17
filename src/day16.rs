@@ -1,6 +1,8 @@
 use aoc_runner_derive::aoc;
 use aoc_runner_derive::aoc_generator;
 
+use std::collections::{HashMap, HashSet};
+
 #[derive(Debug)]
 pub struct Field {
     name: String,
@@ -59,17 +61,100 @@ fn input_generator(input: &str) -> (Vec<Field>, Ticket, Vec<Ticket>) {
     (fields, tickets[0].clone(), tickets[1..].to_vec())
 }
 
-fn sum_completely_invalid_fields(fields: &[Field], ticket: &Ticket) -> u32 {
-    ticket
-        .iter()
-        .filter(|&&value| fields.iter().all(|f| !f.in_range(value)))
-        .sum()
+fn completely_invalid_value(fields: &[Field], value: u32) -> bool {
+    fields.iter().all(|f| !f.in_range(value))
 }
 
 #[aoc(day16, part1)]
 pub fn solve_part1((fields, _, nearby_tickets): &(Vec<Field>, Ticket, Vec<Ticket>)) -> u32 {
     nearby_tickets
         .iter()
-        .map(|t| sum_completely_invalid_fields(&fields, t))
+        .map(|t| t.iter())
+        .flatten()
+        .filter(|value| completely_invalid_value(&fields, **value))
         .sum()
+}
+
+fn field_is_valid_for_index(field: &Field, index: usize, tickets: &[Ticket]) -> bool {
+    tickets
+        .iter()
+        .map(|t| t[index])
+        .all(|value| field.in_range(value))
+}
+
+fn fill_index_mapping(
+    index: usize,
+    mapping: HashMap<String, usize>,
+    valid_fields_for_index: HashMap<usize, HashSet<String>>,
+) -> Option<HashMap<String, usize>> {
+    if index > 19 {
+        return Some(mapping.clone());
+    }
+
+    let valid_fields: HashSet<String> = valid_fields_for_index.get(&index).cloned().unwrap();
+
+    for field in valid_fields {
+        let mut new_mapping = mapping.clone();
+        new_mapping.insert(field.clone(), index);
+
+        let new_valid_fields_for_index: HashMap<usize, HashSet<String>> = valid_fields_for_index
+            .iter()
+            .map(|(index, fields)| {
+                let mut new_fields = fields.clone();
+                new_fields.remove(&field);
+                (*index, new_fields)
+            })
+            .collect();
+
+        if let Some(completed_mapping) =
+            fill_index_mapping(index + 1, new_mapping, new_valid_fields_for_index)
+        {
+            return Some(completed_mapping);
+        }
+    }
+
+    None
+}
+
+#[aoc(day16, part2)]
+pub fn solve_part2(
+    (fields, your_ticket, nearby_tickets): &(Vec<Field>, Ticket, Vec<Ticket>),
+) -> u32 {
+    let tickets: Vec<Ticket> = nearby_tickets
+        .iter()
+        .chain(vec![your_ticket.clone()].iter())
+        .filter(|t| {
+            !t.iter()
+                .any(|value| completely_invalid_value(&fields, *value))
+        })
+        .cloned()
+        .collect();
+
+    let valid_fields_for_index: HashMap<usize, HashSet<String>> = (0..your_ticket.len())
+        .map(|index| {
+            (
+                index,
+                fields
+                    .iter()
+                    .filter_map(|field| {
+                        if field_is_valid_for_index(field, index, &tickets) {
+                            Some(field.name.clone())
+                        } else {
+                            None
+                        }
+                    })
+                    .collect(),
+            )
+        })
+        .collect();
+
+    let mapping = fill_index_mapping(0, HashMap::new(), valid_fields_for_index).unwrap();
+    println!("{:?}", mapping);
+
+    your_ticket[*mapping.get("departure location").unwrap()]
+        * your_ticket[*mapping.get("departure station").unwrap()]
+        * your_ticket[*mapping.get("departure platform").unwrap()]
+        * your_ticket[*mapping.get("departure track").unwrap()]
+        * your_ticket[*mapping.get("departure date").unwrap()]
+        * your_ticket[*mapping.get("departure time").unwrap()]
 }
