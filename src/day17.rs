@@ -47,12 +47,7 @@ pub struct Point4 {
 
 impl Point4 {
     fn new(e1: i64, e2: i64, e3: i64, e4: i64) -> Point4 {
-        Point4 {
-            e1,
-            e2,
-            e3,
-            e4,
-        }
+        Point4 { e1, e2, e3, e4 }
     }
 
     fn neighbors(&self) -> Vec<Point4> {
@@ -62,7 +57,12 @@ impl Point4 {
             .cartesian_product(-1..2)
             .filter_map(|(((i, j), k), l)| {
                 if i != 0 || j != 0 || k != 0 || l != 0 {
-                    Some(Point4::new(self.e1 + i, self.e2 + j, self.e3 + k, self.e4 + l))
+                    Some(Point4::new(
+                        self.e1 + i,
+                        self.e2 + j,
+                        self.e3 + k,
+                        self.e4 + l,
+                    ))
                 } else {
                     None
                 }
@@ -155,7 +155,10 @@ pub fn solve_part1(input: &HashMap<Point, Cube>) -> usize {
 
 #[aoc(day17, part2)]
 pub fn solve_part2(input: &HashMap<Point, Cube>) -> usize {
-    let mut space: HashMap<Point4, Cube> = input.iter().map(|(point, cube)| (point.to_point4(0), *cube)).collect();
+    let mut space: HashMap<Point4, Cube> = input
+        .iter()
+        .map(|(point, cube)| (point.to_point4(0), *cube))
+        .collect();
 
     for _ in 0..6 {
         let reach: HashSet<Point4> = space
