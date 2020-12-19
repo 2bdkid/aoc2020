@@ -89,8 +89,7 @@ impl Expression {
                     }
                 }
                 Token::Add | Token::Mul
-                    if stack.is_empty()
-                        || (!stack.is_empty() && *stack.last().unwrap() == Token::OpenParen) =>
+                    if stack.is_empty() || *stack.last().unwrap() == Token::OpenParen =>
                 {
                     stack.push(*token);
                 }
@@ -134,8 +133,7 @@ impl Expression {
                     }
                 }
                 Token::Add | Token::Mul
-                    if stack.is_empty()
-                        || *stack.last().unwrap() == Token::OpenParen =>
+                    if stack.is_empty() || *stack.last().unwrap() == Token::OpenParen =>
                 {
                     stack.push(*token)
                 }
